@@ -1,0 +1,21 @@
+public class CurrencyCallout {
+    
+    public static HttpResponse  ConversionRate(String currencyFrom, String currencyTo) {
+
+        String api_key     =  ExchangeRate__c.getValues('APIKey').Fixer_API_Key__c;
+        String path      = 'latest';        
+        String parameters   = 'access_key='+ api_key + '&symbols=' + currencyTo ;  
+        String endpoint   = 'callout:ExchangeRate'+ '/' + path + '?' + parameters ; 
+        
+        Http http = new Http();
+        HttpRequest request = new HttpRequest();
+           
+        request.setEndpoint(endpoint);
+        request.setMethod('GET');
+        
+        HttpResponse response = http.send(request);      
+        
+    return response;
+    }
+    
+}
