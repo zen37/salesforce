@@ -1,0 +1,71 @@
+public class ConversionRate_Controller {
+    
+    @TestVisible 
+    private class InitValues {
+        
+        @AuraEnabled @TestVisible
+        private List<String> Currencies {get; set;}
+        @AuraEnabled @TestVisible 
+        private String CurrencyFrom {get; set;}
+        @AuraEnabled @TestVisible 
+        private String CurrencyTo {get; set;}      
+       
+        @TestVisible 
+        InitValues(){
+           Currencies  = CurrencyHelper.getListCurrencies(); 
+           CurrencyFrom  = CurrencyHelper.getCurrencyFrom();
+           CurrencyTo  = CurrencyHelper.getCurrencyTo();   
+       }
+    }
+    
+    @AuraEnabled(cacheable=true)
+    public static InitValues getInitValues(){
+        
+        InitValues obj = new InitValues();
+       return obj;   
+    }    
+    
+    
+    @AuraEnabled
+    public static String getConversionRate(String currencyFrom, String currencyTo) {
+        
+        String rate;
+        
+        if (!Test.isRunningTest()){
+            
+            HttpResponse response =  CurrencyCallout.ConversionRate(currencyFrom, currencyTo);     
+            
+            if (response.getStatusCode() != 200) {
+                 rate = 'Rate cannot be displayed due to: ' + response.getStatusCode() + ' ' + response.getStatus(); 
+            } else {              
+                 rate = getValuefromJSON(response.getBody(), currencyTo);
+            }           
+        } else {               
+             StaticResource mock = [ SELECT Body FROM StaticResource WHERE Name = 'GetConversionRate'];
+             rate = getValuefromJSON(mock.Body.toString(), currencyTo);
+        }
+
+        return rate;
+    } 
+    
+    
+   private static String getValuefromJSON(String result, String currencyTo) {
+        
+        String rate;
+        
+        Map<String, Object> m =  (Map<String, Object>)JSON.deserializeUntyped(result);
+        
+        Boolean success = Boolean.valueOf(m.get('success'));
+        
+        if (success) {
+            Map<String, Object> rates = (Map<String, Object>)m.get('rates');             
+          Decimal value = (Decimal)rates.get(currencyTo);
+            rate = value.toPlainString();  
+         } else {
+             Map<String, Object> error = (Map<String, Object>)m.get('error'); 
+             rate = 'ERROR: ' + error.get('code') + ' - ' +  error.get('type') + ' - ' + error.get('info');
+         }                                                          
+                                                                           
+        return rate; 
+    }    
+}
