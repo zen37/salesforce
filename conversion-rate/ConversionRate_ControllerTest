@@ -1,0 +1,54 @@
+@isTest
+public class ConversionRate_ControllerTest {
+    
+    @isTest(SeeAllData=true)  
+    static void testCurrencyCallout_ConversionRate() {
+        
+        StaticResourceCalloutMock mock = new StaticResourceCalloutMock();
+        
+        mock.setStaticResource('GetConversionRate');
+        mock.setStatusCode(200);
+        mock.setHeader('Content-Type', 'application/json;charset=UTF-8');
+        Test.setMock(HttpCalloutMock.class, mock);
+        
+        HttpResponse result = CurrencyCallout.ConversionRate('EUR', 'CAD');
+
+        System.assertNotEquals(null, result, 'The callout returned a null response.');
+        System.assertEquals(200,result.getStatusCode(), 'The status code is not 200.');
+        System.assertEquals('application/json;charset=UTF-8', result.getHeader('Content-Type'), 'The content type value is not expected.');         
+    }   
+ 
+    @isTest
+    static void TestgetInitValues(){
+        ConversionRate_Controller.InitValues initValues =  new ConversionRate_Controller.InitValues();
+    initValues = ConversionRate_Controller.getInitValues();
+        System.assertNotEquals(null, initValues, 'The call returned a null response.');   
+        
+        String expCurrFrom = 'EUR';
+        String actCurrFrom = initValues.CurrencyFrom;
+        System.assertEquals(expCurrFrom, actCurrFrom); 
+        
+        String expCurrTo = 'JPY';
+        String actCurrTo = initValues.CurrencyTo;
+        System.assertEquals(expCurrTo, actCurrTo);    
+        
+        List<String> expList = new List<String>{'USD', 'GBP', 'JPY', 'CAD', 'EUR'}; 
+        List<String> actList =  initValues.Currencies;  
+        System.assertEquals(expList, actList);            
+    }
+  
+    @isTest(SeeAllData=true) 
+    static void TestSuccess_getConversionRate() {
+        
+        String rate = ConversionRate_Controller.getConversionRate('EUR', 'CAD');
+        System.assertEquals('1.468611', rate);           
+    }
+    
+    @isTest(SeeAllData=true) 
+    static void TestError_getConversionRate() {
+        
+        String rate = ConversionRate_Controller.getConversionRate('EUR', 'XYZ');
+        System.assertEquals('ERROR', rate.left(5));           
+    }
+   
+}
