@@ -1,4 +1,4 @@
-Lightning component that shows the conversion rate between currencies using an API from https://fixer.io/  
+Lightning component that shows the conversion rate between currencies using an API from https://fixer.io/  &nbsp  
 This is a quick implementation, and if I had had to do this in a real-life project I would have requested additional clarifications:
 * Is the client using something similar currently? What they like and what they don't like about they're using?
 * Is multi-currency enabled in the org? (determine how to choose the 'From' currency)
