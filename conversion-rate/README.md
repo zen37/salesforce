@@ -2,7 +2,7 @@ Lightning component that shows the conversion rate between currencies using an A
 
 This is a quick implementation, and if I had to do this in a real-life project I would have requested additional clarifications:
 * Is the client using something similar currently? What they like and what they don't like about they're using?
-Is multi-currency enabled in the org? (determine how to choose the 'From' currency)
+* Is multi-currency enabled in the org? (determine how to choose the 'From' currency)
 Who is going to use the conversion rate and what for? (perhaps the default 'To' currency could be determined based on the account billing address or contact address or any other criteria, everything to minimize clicking and scrolling)
 Are there currencies the user would more often want to get the conversion rate for? (to put them at the top of the list, same reason as above) 
 Is a real time exchange rate needed or a daily one would suffice? 
