@@ -1,0 +1,38 @@
+    //default currency from
+    public static String getCurrencyFrom(){
+        
+        String currencyFrom;       
+        //rules to determine the currency
+        currencyFrom = 'EUR'; //hard-coded for the time being
+        
+        return currencyFrom;     
+    }
+    
+   //default currency to
+    public static String getCurrencyTo(){
+        
+        String currencyTo;       
+        //rules to determine the currency
+        currencyTo = 'JPY'; //hard-coded for the time being
+        
+        return currencyTo;   
+        
+    }
+    
+    //list of currencies user can convert to
+    public static List<String> getListCurrencies(){
+        
+        List<String> currencies = new List<String>();
+        
+        //rules to determine the currencies and the order
+        currencies.add('USD');
+        currencies.add('GBP');
+        currencies.add('JPY');
+        currencies.add('CAD');         
+        currencies.add('EUR'); 
+        currencies.add('XYZ'); 
+        
+        return currencies;
+    }
+    
+}
