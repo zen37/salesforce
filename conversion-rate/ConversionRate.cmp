@@ -1,0 +1,36 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:lightningQuickActionWithoutHeader"
+access="global" controller="ConversionRate_Controller">
+  
+<lightning:card title="Conversion" iconName="standard:currency" class="slds-size_4-of-6">
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    <div class="slds-form slds-form_horizontal slds-p-around_small">
+    
+    <lightning:input name="from" label="From" aura:id="from" value="{! v.fromCurrency }" default="EUR" readonly="true" />	   
+    <lightning:input type="number" aura:id="amount" name="amount" value="1" required="true" step="0.01" 
+                     				messageWhenStepMismatch="Please enter only two decimals."/> 	
+    <lightning:buttonIcon iconName="utility:rotate" variant="border-filled" onclick="{! c.swapCurrencies }" alternativeText="Swap currencies" />   
+   	
+    <lightning:select name="mySelect" onchange="{!c.getRate }" label="To" aura:id="mySelect" value="{!v.selectedValue}" >
+         <aura:iteration items="{!v.currencies}" var="item">
+            <option value="{!item.value}" selected="{!item.selected}">
+                {!item.label}
+            </option>
+        </aura:iteration>
+    </lightning:select>        
+
+    <lightning:formattedNumber value = "{! v.rate}"  maximumFractionDigits="6"/>   
+    <div>
+    	<lightning:button label="Get Rate" onclick="{! c.getRate }"/> 
+    </div>
+	</div>
+</lightning:card>    
+
+
+    <aura:handler name="init" value="{!this}" action="{!c.loadCurrencies}" />
+    
+    <aura:attribute name="fromCurrency" type="String"/>   
+    <aura:attribute name="currencies" type="List" />
+    <aura:attribute name="selectedValue" type="String" default="USD"/>
+    <aura:attribute name="rate" type="String"  />
+
+</aura:component>
